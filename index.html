@@ -8,167 +8,706 @@
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:#000;
-  color:#fff;
-  font-family:Arial,sans-serif;
-}
-.app{
-  max-width:500px;
-  margin:auto;
-  min-height:100vh;
-  background:#111;
+ margin:0;
+ background:#000;
+ color:#fff;
+ font-family:Arial,sans-serif;
 }
 header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#111;
-  padding:14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+ position:sticky;
+ top:0;
+ z-index:10;
+ height:70px;
+ background:#111;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:10px 15px;
 }
-.logo{font-size:25px;font-weight:bold}
-button{
-  border:0;
-  border-radius:10px;
-  padding:10px 14px;
-  font-size:15px;
-}
+.logo{font-size:26px;font-weight:bold}
 .upload{
-  background:#ff1744;
-  color:white;
+ background:#ff1744;
+ color:white;
+ border:0;
+ border-radius:12px;
+ padding:14px 20px;
+ font-size:16px;
+ font-weight:bold;
 }
-.video{
-  margin:10px 0 25px;
-  background:#000;
-  min-height:480px;
-  position:relative;
+input[type=file]{display:none}
+
+nav{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ height:65px;
+ background:#111;
+ display:flex;
+ justify-content:space-around;
+ align-items:center;
+ z-index:20;
+}
+nav button{
+ background:none;
+ border:0;
+ color:white;
+ font-size:14px;
+}
+.page{
+ padding-bottom:85px;
+}
+.videoCard{
+ min-height:calc(100vh - 135px);
+ padding:20px 15px;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+}
+.videoBox{
+ width:100%;
+ max-height:65vh;
+ background:#111;
+ border-radius:15px;
+ overflow:hidden;
 }
 video{
-  width:100%;
-  max-height:600px;
-  background:#000;
+ width:100%;
+ max-height:65vh;
+ display:block;
 }
-.info{
-  padding:10px;
+.username{
+ font-size:19px;
+ font-weight:bold;
+ margin-top:15px;
+}
+.caption{
+ font-size:17px;
+ margin:8px 0;
 }
 .actions{
-  display:flex;
-  justify-content:space-around;
-  padding:10px;
+ display:flex;
+ gap:7px;
+ margin-top:12px;
 }
 .actions button{
-  background:#222;
-  color:white;
+ flex:1;
+ background:#222;
+ color:white;
+ border:0;
+ border-radius:12px;
+ padding:13px 5px;
+ font-size:14px;
 }
-.liked{color:#ff1744!important}
-.follow{
-  background:#ff1744;
-  color:white;
+.actions button.active{
+ background:#ff1744;
 }
-input,textarea{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border-radius:8px;
-  border:0;
+.comments{
+ margin-top:15px;
 }
-.panel{
-  display:none;
-  padding:15px;
+.commentBox{
+ display:flex;
+ gap:5px;
 }
-.nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  max-width:500px;
-  margin:auto;
-  background:#181818;
-  display:flex;
-  justify-content:space-around;
-  padding:10px 5px;
-  z-index:20;
+.commentBox input{
+ flex:1;
+ padding:12px;
+ border-radius:10px;
+ border:0;
 }
-.nav button{
-  background:none;
-  color:white;
+.commentBox button{
+ border:0;
+ border-radius:10px;
+ padding:10px 15px;
+ background:#ff1744;
+ color:#fff;
 }
-.space{height:65px}
 .comment{
-  background:#222;
-  padding:8px;
-  margin:5px 0;
-  border-radius:8px;
+ background:#191919;
+ padding:8px;
+ border-radius:8px;
+ margin-top:5px;
+}
+.screen{
+ display:none;
+ padding:25px 15px;
+}
+.screen.active{display:block}
+.profile{
+ text-align:center;
+ padding:30px 10px;
+}
+.avatar{
+ width:90px;
+ height:90px;
+ border-radius:50%;
+ background:#ff1744;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:40px;
+ margin:auto;
+}
+.form{
+ display:flex;
+ flex-direction:column;
+ gap:12px;
+ max-width:400px;
+ margin:auto;
+}
+.form input{
+ padding:14px;
+ border-radius:10px;
+ border:0;
+ font-size:16px;
+}
+.form button{
+ padding:14px;
+ border:0;
+ border-radius:10px;
+ background:#ff1744;
+ color:#fff;
+ font-weight:bold;
+ font-size:16px;
+}
+.empty{
+ text-align:center;
+ padding:70px 10px;
+ color:#aaa;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
 <header>
-  <div class="logo">🎬 NPTOK</div>
-  <button class="upload" onclick="openUpload()">＋ Video</button>
+ <div class="logo">🎬 NPTOK</div>
+
+ <label class="upload">
+   ＋ Video
+   <input id="videoPicker" type="file" accept="video/*">
+ </label>
 </header>
 
+<div class="page">
+
 <!-- HOME -->
-<div id="home">
+<section id="home" class="screen active">
 
-  <div class="video">
-    <div style="padding:20px;text-align:center">
-      🎬 Welcome to NPTOK
-      <p>Upload your first video!</p>
-    </div>
+ <div id="feed">
 
-    <div class="info">
-      <b>@NPTOK</b>
-      <p>Welcome to NPTOK ❤️</p>
-    </div>
+  <div class="videoCard">
 
-    <div class="actions">
-      <button onclick="likePost(this)">❤️ <span>0</span></button>
-      <button onclick="commentPost()">💬 Comment</button>
-      <button onclick="sharePost()">↗️ Share</button>
-      <button class="follow" onclick="follow(this)">Follow</button>
+   <div class="videoBox">
+    <div class="empty">
+     🎬<br><br>
+     Welcome to NPTOK<br><br>
+     Upload your first video!
     </div>
+   </div>
+
+   <div class="username">@NPTOK</div>
+   <div class="caption">Welcome to NPTOK ❤️</div>
+
+   <div class="actions">
+    <button onclick="likeVideo(this)">❤️ <span>0</span></button>
+    <button onclick="showComments(this)">💬 Comment</button>
+    <button onclick="shareVideo()">↗️ Share</button>
+    <button onclick="followUser(this)">Follow</button>
+   </div>
+
+   <div class="comments" style="display:none">
+    <div class="commentBox">
+     <input placeholder="Write a comment...">
+     <button onclick="addComment(this)">Send</button>
+    </div>
+    <div class="commentList"></div>
+   </div>
+
   </div>
 
-  <div id="videos"></div>
-</div>
+ </div>
+</section>
 
-<!-- UPLOAD -->
-<div id="uploadPanel" class="panel">
-  <h2>🎥 Upload Video</h2>
-
-  <input id="videoFile" type="file" accept="video/*">
-
-  <input id="caption" placeholder="Write caption...">
-
-  <button class="upload" onclick="uploadVideo()">Post Video</button>
-  <button onclick="closePanels()">Cancel</button>
-</div>
 
 <!-- PROFILE -->
-<div id="profile" class="panel">
-  <h2>👤 My Profile</h2>
+<section id="profile" class="screen">
 
-  <input id="username" placeholder="Username">
+ <div class="profile">
 
-  <button class="upload" onclick="saveProfile()">Save Profile</button>
+  <div class="avatar">👤</div>
 
-  <hr>
+  <h2 id="profileName">Guest</h2>
+  <p id="profileEmail">Not logged in</p>
 
-  <h3 id="profileName">@Guest</h3>
-  <p>My NPTOK profile</p>
+  <p>
+   ❤️ Likes: <span id="likeCount">0</span>
+  </p>
 
-  <h3>My Videos</h3>
-  <div id="myVideos"></div>
-</div>
+  <button class="form button" onclick="openAccount()">
+   Account
+  </button>
+
+ </div>
+
+</section>
+
 
 <!-- ACCOUNT -->
-<div id="account" class="panel">
-  <h2>🔐 Account</h
+<section id="account" class="screen">
+
+ <h2>👤 NPTOK Account</h2>
+
+ <div class="form">
+
+  <input id="name" placeholder="Your name">
+
+  <input id="email" type="email" placeholder="Email">
+
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="createAccount()">
+   Create / Login
+  </button>
+
+  <button onclick="logout()" style="background:#333">
+   Logout
+  </button>
+
+ </div>
+
+ <div id="accountMessage" style="text-align:center;margin-top:20px"></div>
+
+</section>
+
+
+<!-- SEARCH -->
+<section id="search" class="screen">
+
+ <h2>🔎 Search NPTOK</h2>
+
+ <div class="form">
+
+  <input id="searchInput"
+         placeholder="Search videos or users..."
+         oninput="searchContent()">
+
+ </div>
+
+ <div id="searchResult" class="empty">
+  Search something...
+ </div>
+
+</section>
+
+</div>
+
+
+<!-- NAVIGATION -->
+<nav>
+
+ <button onclick="showPage('home')">
+  🏠<br>Home
+ </button>
+
+ <button onclick="showPage('search')">
+  🔎<br>Search
+ </button>
+
+ <button onclick="document.getElementById('videoPicker').click()">
+  ➕<br>Video
+ </button>
+
+ <button onclick="showPage('profile')">
+  👤<br>Profile
+ </button>
+
+ <button onclick="showPage('account')">
+  🔐<br>Account
+ </button>
+
+</nav>
+
+
+<script>
+
+let currentUser =
+ JSON.parse(localStorage.getItem("nptokUser")) || null;
+
+let totalLikes =
+ Number(localStorage.getItem("nptokLikes") || 0);
+
+
+/* PAGE SYSTEM */
+
+function showPage(page){
+
+ document.querySelectorAll(".screen")
+ .forEach(x => x.classList.remove("active"));
+
+ document.getElementById(page)
+ .classList.add("active");
+
+ window.scrollTo(0,0);
+
+}
+
+
+/* VIDEO UPLOAD */
+
+document.getElementById("videoPicker")
+.addEventListener("change", function(){
+
+ const file = this.files[0];
+
+ if(!file) return;
+
+ if(!file.type.startsWith("video/")){
+  alert("Please select a video.");
+  return;
+ }
+
+ const url = URL.createObjectURL(file);
+
+ const card = document.createElement("div");
+ card.className = "videoCard";
+
+ card.innerHTML = `
+
+  <div class="videoBox">
+
+   <video
+    src="${url}"
+    controls
+    playsinline>
+   </video>
+
+  </div>
+
+  <div class="username">
+   @${currentUser ? currentUser.name : "NPTOK"}
+  </div>
+
+  <div class="caption">
+   My new NPTOK video 🎬❤️
+  </div>
+
+  <div class="actions">
+
+   <button onclick="likeVideo(this)">
+    ❤️ <span>0</span>
+   </button>
+
+   <button onclick="showComments(this)">
+    💬 Comment
+   </button>
+
+   <button onclick="shareVideo()">
+    ↗️ Share
+   </button>
+
+   <button onclick="followUser(this)">
+    Follow
+   </button>
+
+  </div>
+
+  <div class="comments" style="display:none">
+
+   <div class="commentBox">
+
+    <input placeholder="Write a comment...">
+
+    <button onclick="addComment(this)">
+     Send
+    </button>
+
+   </div>
+
+   <div class="commentList"></div>
+
+  </div>
+ `;
+
+ document.getElementById("feed")
+ .prepend(card);
+
+ showPage("home");
+
+ alert("Video added to NPTOK!");
+
+});
+
+
+/* LIKE */
+
+function likeVideo(button){
+
+ let span = button.querySelector("span");
+
+ let count = Number(span.textContent);
+
+ if(button.classList.contains("active")){
+
+  count--;
+  totalLikes--;
+
+  button.classList.remove("active");
+
+ }else{
+
+  count++;
+  totalLikes++;
+
+  button.classList.add("active");
+
+ }
+
+ span.textContent = count;
+
+ localStorage.setItem("nptokLikes", totalLikes);
+
+ document.getElementById("likeCount")
+ .textContent = totalLikes;
+
+}
+
+
+/* COMMENT */
+
+function showComments(button){
+
+ const comments =
+ button.parentElement.nextElementSibling;
+
+ comments.style.display =
+ comments.style.display === "none"
+ ? "block"
+ : "none";
+
+}
+
+
+function addComment(button){
+
+ const box =
+ button.parentElement;
+
+ const input =
+ box.querySelector("input");
+
+ const text =
+ input.value.trim();
+
+ if(!text) return;
+
+ const list =
+ box.nextElementSibling;
+
+ const comment =
+ document.createElement("div");
+
+ comment.className = "comment";
+
+ comment.textContent =
+ "👤 " +
+ (currentUser ? currentUser.name : "User") +
+ ": " +
+ text;
+
+ list.appendChild(comment);
+
+ input.value = "";
+
+}
+
+
+/* SHARE */
+
+async function shareVideo(){
+
+ const text =
+ "Check out NPTOK 🎬❤️";
+
+ if(navigator.share){
+
+  try{
+
+   await navigator.share({
+    title:"NPTOK",
+    text:text,
+    url:location.href
+   });
+
+  }catch(e){}
+
+ }else{
+
+  try{
+
+   await navigator.clipboard.writeText(location.href);
+
+   alert("NPTOK link copied!");
+
+  }catch(e){
+
+   alert("Share link: " + location.href);
+
+  }
+
+ }
+
+}
+
+
+/* FOLLOW */
+
+function followUser(button){
+
+ if(button.classList.contains("active")){
+
+  button.textContent = "Follow";
+  button.classList.remove("active");
+
+ }else{
+
+  button.textContent = "Following ✓";
+  button.classList.add("active");
+
+ }
+
+}
+
+
+/* ACCOUNT */
+
+function createAccount(){
+
+ const name =
+ document.getElementById("name").value.trim();
+
+ const email =
+ document.getElementById("email").value.trim();
+
+ const password =
+ document.getElementById("password").value;
+
+ if(!name || !email || !password){
+
+  alert("Please fill all fields.");
+
+  return;
+
+ }
+
+ currentUser = {
+  name:name,
+  email:email
+ };
+
+ localStorage.setItem(
+  "nptokUser",
+  JSON.stringify(currentUser)
+ );
+
+ document.getElementById("profileName")
+ .textContent = name;
+
+ document.getElementById("profileEmail")
+ .textContent = email;
+
+ document.getElementById("accountMessage")
+ .textContent =
+ "✅ Account saved on this device!";
+
+ alert("NPTOK account created!");
+
+ showPage("profile");
+
+}
+
+
+function logout(){
+
+ localStorage.removeItem("nptokUser");
+
+ currentUser = null;
+
+ document.getElementById("profileName")
+ .textContent = "Guest";
+
+ document.getElementById("profileEmail")
+ .textContent = "Not logged in";
+
+ alert("Logged out.");
+
+ showPage("home");
+
+}
+
+
+function openAccount(){
+
+ showPage("account");
+
+}
+
+
+/* SEARCH */
+
+function searchContent(){
+
+ const q =
+ document.getElementById("searchInput")
+ .value.toLowerCase();
+
+ const result =
+ document.getElementById("searchResult");
+
+ if(!q){
+
+  result.textContent =
+   "Search something...";
+
+  return;
+
+ }
+
+ if(
+  "nptok".includes(q) ||
+  "welcome".includes(q)
+ ){
+
+  result.innerHTML =
+   "🎬 <b>@NPTOK</b><br><br>" +
+   "Welcome to NPTOK ❤️";
+
+ }else{
+
+  result.textContent =
+   "No result found.";
+
+ }
+
+}
+
+
+/* LOAD USER */
+
+if(currentUser){
+
+ document.getElementById("profileName")
+ .textContent = currentUser.name;
+
+ document.getElementById("profileEmail")
+ .textContent = currentUser.email;
+
+}
+
+document.getElementById("likeCount")
+.textContent = totalLikes;
+
+</script>
+
+</body>
+</html>
