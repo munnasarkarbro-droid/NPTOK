@@ -1,0 +1,9 @@
+{
+  "name": "NPTOK",
+  "short_name": "NPTOK",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff1744",
+  "description": "NPTOK short video app"
+}
