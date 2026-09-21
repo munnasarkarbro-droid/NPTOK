@@ -1,69 +1,174 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NPTOK</title>
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPTOK</title>
 
-    .app {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      padding: 15px;
-      text-align: center;
-      font-size: 25px;
-      font-weight: bold;
-    }
-
-    .video {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-around;
-      padding: 15px;
-      font-size: 18px;
-    }
-
-    button {
-      background: none;
-      color: white;
-      border: none;
-      font-size: 18px;
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+.app{
+  max-width:500px;
+  margin:auto;
+  min-height:100vh;
+  background:#111;
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{font-size:25px;font-weight:bold}
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:15px;
+}
+.upload{
+  background:#ff1744;
+  color:white;
+}
+.video{
+  margin:10px 0 25px;
+  background:#000;
+  min-height:480px;
+  position:relative;
+}
+video{
+  width:100%;
+  max-height:600px;
+  background:#000;
+}
+.info{
+  padding:10px;
+}
+.actions{
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+}
+.actions button{
+  background:#222;
+  color:white;
+}
+.liked{color:#ff1744!important}
+.follow{
+  background:#ff1744;
+  color:white;
+}
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border-radius:8px;
+  border:0;
+}
+.panel{
+  display:none;
+  padding:15px;
+}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  max-width:500px;
+  margin:auto;
+  background:#181818;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 5px;
+  z-index:20;
+}
+.nav button{
+  background:none;
+  color:white;
+}
+.space{height:65px}
+.comment{
+  background:#222;
+  padding:8px;
+  margin:5px 0;
+  border-radius:8px;
+}
+</style>
 </head>
 
 <body>
-  <div class="app">
 
-    <header>NPTOK</header>
+<div class="app">
 
-    <div class="video">
-      🎬 NPTOK
+<header>
+  <div class="logo">🎬 NPTOK</div>
+  <button class="upload" onclick="openUpload()">＋ Video</button>
+</header>
+
+<!-- HOME -->
+<div id="home">
+
+  <div class="video">
+    <div style="padding:20px;text-align:center">
+      🎬 Welcome to NPTOK
+      <p>Upload your first video!</p>
     </div>
 
-    <div class="buttons">
-      <button>❤️ Like</button>
-      <button>💬 Comment</button>
-      <button>↗️ Share</button>
-      <button>👤 Profile</button>
+    <div class="info">
+      <b>@NPTOK</b>
+      <p>Welcome to NPTOK ❤️</p>
     </div>
 
+    <div class="actions">
+      <button onclick="likePost(this)">❤️ <span>0</span></button>
+      <button onclick="commentPost()">💬 Comment</button>
+      <button onclick="sharePost()">↗️ Share</button>
+      <button class="follow" onclick="follow(this)">Follow</button>
+    </div>
   </div>
-</body>
-</html>
+
+  <div id="videos"></div>
+</div>
+
+<!-- UPLOAD -->
+<div id="uploadPanel" class="panel">
+  <h2>🎥 Upload Video</h2>
+
+  <input id="videoFile" type="file" accept="video/*">
+
+  <input id="caption" placeholder="Write caption...">
+
+  <button class="upload" onclick="uploadVideo()">Post Video</button>
+  <button onclick="closePanels()">Cancel</button>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="panel">
+  <h2>👤 My Profile</h2>
+
+  <input id="username" placeholder="Username">
+
+  <button class="upload" onclick="saveProfile()">Save Profile</button>
+
+  <hr>
+
+  <h3 id="profileName">@Guest</h3>
+  <p>My NPTOK profile</p>
+
+  <h3>My Videos</h3>
+  <div id="myVideos"></div>
+</div>
+
+<!-- ACCOUNT -->
+<div id="account" class="panel">
+  <h2>🔐 Account</h
